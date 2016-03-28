@@ -18,7 +18,10 @@ for i in range (0, 56):
 
 
 #calling random photos from array and compressing them to be 400x400
-num = imArray[15]
+num = imArray[36]
 ##num.show()
 num = num.resize((160, 90), Image.ANTIALIAS)
 num.show()
+
+
+##filename = "1.jpg"
