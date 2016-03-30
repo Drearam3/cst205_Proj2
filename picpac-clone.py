@@ -1,8 +1,8 @@
 
 from PIL import Image
+from tkinter import filedialog as fd
 import webcolors
-from  tkinter import *
-
+import os
 
 
 #---------------BORROWED-------------------------------------------
@@ -35,26 +35,31 @@ def create_mosaic(original_picture, file):
 
     
     #path to folder with the tile images
-    path = "/Users/Drea/Desktop/Proj2/cst205_Proj2/"
+    path = os.path.dirname(file) + "/"
 
     #width and height that image to be mosaicked will be resized to
-    org_width = 222
-    org_height = 85
+
     tile_height = 8
     tile_width = 8
-    tiles = 109
+    tiles = 9
     actual = [""]
     close = [""]
     my_actual = actual
     my_close = close
+
+    print(file)
             
 
     #resizing of "original picture" <- picture to be mosaicked
-    original_picture = original_picture.resize((org_width, org_height), Image.ANTIALIAS)
-
-    original_picture.save(file)
-
+    basewidth = 200
     original_picture = Image.open(file)
+    wpercent = (basewidth/float(original_picture.size[0]))
+    hsize = int((float(original_picture.size[1])*float(wpercent)))
+    original_picture = original_picture.resize((basewidth,hsize), Image.ANTIALIAS)
+    original_picture.save('Original.jpg')
+    
+    org_width, org_height = original_picture.size
+
     
     #width and height of actual mosaic
     output_size = ((org_width * tile_width), (org_height * tile_height))
@@ -104,15 +109,15 @@ def create_mosaic(original_picture, file):
         tile_actual_name, tile_closest_name = get_colour_name(tile_color_to_match)
         if( 125 < r_avg < 255 and 0 < g_avg < 160 and 0 < b_avg < 150):
             tile_actual_name = "Red";
-        if( 0 < r_avg < 160 and 125 < g_avg < 255 and 0 < b_avg < 150):
+        elif( 0 < r_avg < 160 and 125 < g_avg < 255 and 0 < b_avg < 150):
             tile_actual_name = "Blue";
-        if( 150 < r_avg < 255 and 150 < g_avg < 255 and 20 < b_avg < 200):
+        elif( 140 < r_avg < 255 and 140 < g_avg < 255 and 20 < b_avg < 200):
             tile_actual_name = "Yellow";
-        if( 100 < r_avg < 255 and 50 < g_avg < 200 and 0 < b_avg < 140):
+        elif( 100 < r_avg < 255 and 50 < g_avg < 200 and 0 < b_avg < 140):
             tile_actual_name = "Orange";
-        if( 0 < r_avg < 160 and 0 < g_avg < 160 and 125 < b_avg < 255):
+        elif( 0 < r_avg < 160 and 0 < g_avg < 160 and 125 < b_avg < 255):
             tile_actual_name = "Green";
-        if( 170 < r_avg < 255 and 170 < g_avg < 255 and 170 < b_avg < 255):
+        elif( 170 < r_avg < 255 and 170 < g_avg < 255 and 170 < b_avg < 255):
             tile_actual_name = "White";
 
 
@@ -192,12 +197,10 @@ def create_mosaic(original_picture, file):
     mosaic.show()
 ###-------------------------------------MAIN----------------------------------------------
 
-root = Tk()
-root.filename =  filedialog.askopenfilename(initialdir = "E:/Images",title = "choose your file",filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
-print (root.filename)
-org_filename = root.filename
-root.withdraw() 
-##org_filename = "/Users/Drea/Desktop/Proj2/cst205_Proj2/original.jpg"
-original_image = Image.open(org_filename)
-create_mosaic(original_image, org_filename)
+file = fd.askopenfile()
+filename = str(file.name)
+print(filename)
+original_image = Image.open(filename)
+create_mosaic(original_image, filename)
+
 
